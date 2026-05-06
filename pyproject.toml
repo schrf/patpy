@@ -35,6 +35,9 @@ dependencies = [
   "seaborn>=0.12",
 ]
 
+optional-dependencies.pert-distances = [
+    "pertpy>=1.0.5", # TODO: maybe add additional pertpy dependencies?
+]
 optional-dependencies.de = [
   "pertpy[de]>=1.0.5",
 ]

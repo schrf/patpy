@@ -23,6 +23,7 @@ from .sample_representation import (
     GroupedPseudobulk,
     MrVI,
     Pseudobulk,
+    PertPyDistances,
     RandomVector,
     SampleRepresentationMethod,
     SCPoli,

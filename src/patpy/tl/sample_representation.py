@@ -2085,3 +2085,38 @@ class GloScope_py(SampleRepresentationMethod):
         self.adata.uns[self.DISTANCES_UNS_KEY] = self.sample_representation
 
         return self.sample_representation
+
+class PertPyDistances(SampleRepresentationMethod):
+    """Every patient is modeled as a perturbation experiment. Relies on distance metrics defined in PertPy."""
+
+    def __init__(self, sample_key, cell_group_key, layer="X_pca", seed=67, dist="euclidean"):
+        import pertpy as pt
+
+        super().__init__(sample_key=sample_key, cell_group_key=cell_group_key, layer=layer, seed=seed)
+
+        # create pertpy distance object; raises an error when distance_metric is not valid
+        self.cell_wise_metric = "euclidean"
+        self.distance = pt.tl.Distance(metric=dist, obsm_key=layer, cell_wise_metric=self.cell_wise_metric)
+
+        self.DISTANCES_UNS_KEY = f"X_pertpy_{dist}"
+        self.distance_metric = dist
+        #TODO: self.aggregate = aggregate maybe add the functions from pertpy
+
+    def calculate_distance_matrix(self, force: bool = False):
+        """Calculate distances between samples"""
+        distances = super().calculate_distance_matrix(force=force)
+
+        if distances is not None:
+            return distances
+
+        distances = self.distance.pairwise(self.adata, groupby=self.sample_key)
+        distances = distances.to_numpy()
+
+        self.adata.uns[self.DISTANCES_UNS_KEY] = distances
+        self.adata.uns["bulk_parameters"] = {
+            "sample_key": self.sample_key,
+            #TODO: "aggregate": self.aggregate, maybe add the functions from pertpy
+            "distance_type": self.distance_metric,
+        }
+
+        return distances
