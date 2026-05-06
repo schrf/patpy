@@ -2086,6 +2086,7 @@ class GloScope_py(SampleRepresentationMethod):
 
         return self.sample_representation
 
+
 class PertPyDistances(SampleRepresentationMethod):
     """Every patient is modeled as a perturbation experiment. Relies on distance metrics defined in PertPy."""
 
@@ -2100,7 +2101,7 @@ class PertPyDistances(SampleRepresentationMethod):
 
         self.DISTANCES_UNS_KEY = f"X_pertpy_{dist}"
         self.distance_metric = dist
-        #TODO: self.aggregate = aggregate maybe add the functions from pertpy
+        # TODO: self.aggregate = aggregate maybe add the functions from pertpy
 
     def calculate_distance_matrix(self, force: bool = False):
         """Calculate distances between samples"""
@@ -2115,7 +2116,7 @@ class PertPyDistances(SampleRepresentationMethod):
         self.adata.uns[self.DISTANCES_UNS_KEY] = distances
         self.adata.uns["bulk_parameters"] = {
             "sample_key": self.sample_key,
-            #TODO: "aggregate": self.aggregate, maybe add the functions from pertpy
+            # TODO: "aggregate": self.aggregate, maybe add the functions from pertpy
             "distance_type": self.distance_metric,
         }
 
